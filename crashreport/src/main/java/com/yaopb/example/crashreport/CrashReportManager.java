@@ -14,6 +14,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CrashReportManager {
+    private final int SLEEP_TIME = 20 * 1000;
     static CrashReportManager instance;
     static ConcurrentLinkedQueue<String> reportQueue;
 
@@ -25,7 +26,7 @@ public class CrashReportManager {
         return instance;
     }
 
-    private void inReportQueue(String crashLog) {
+    public void inReportQueue(String crashLog) {
         if (reportQueue == null) {
             reportQueue = new ConcurrentLinkedQueue<>();
         }
@@ -34,8 +35,8 @@ public class CrashReportManager {
     }
 
     private void startReport() {
-        if (thread.isAlive()) {
-
+        if (!thread.isAlive()) {
+            thread.start();
         }
     }
 
@@ -46,6 +47,11 @@ public class CrashReportManager {
                 if (reportQueue != null && !reportQueue.isEmpty()) {
                     String crashLog = reportQueue.poll();
                     send(crashLog);
+                }
+                try {
+                    Thread.sleep(SLEEP_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

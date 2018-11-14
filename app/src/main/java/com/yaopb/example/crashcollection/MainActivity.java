@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i = 0, j = 1;
-                Log.d("JUE", (j / i) + "");
+                int[] array = new int[2];
+                Log.d("JUE", array[2] + "");
             }
         });
     }
